@@ -10,11 +10,12 @@ package com.taobao.tair.comm;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.mina.common.ByteBuffer;
-import org.apache.mina.common.IoSession;
+import org.apache.mina.core.buffer.IoBuffer;
+import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.CumulativeProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 
@@ -38,9 +39,10 @@ public class TairProtocolDecoder extends CumulativeProtocolDecoder {
 		this.pstreamer = pstreamer;
 		
 	}
+		
 	
 	@Override
-	protected boolean doDecode(IoSession session, ByteBuffer in, ProtocolDecoderOutput out) 
+	protected boolean doDecode(IoSession session, IoBuffer in, ProtocolDecoderOutput out) 
 		throws Exception {
 		final int origonPos = in.position();
         final int packetLength = in.remaining();

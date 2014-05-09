@@ -18,10 +18,10 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.mina.common.IoFuture;
-import org.apache.mina.common.IoFutureListener;
-import org.apache.mina.common.IoSession;
-import org.apache.mina.common.WriteFuture;
+import org.apache.mina.core.future.IoFuture;
+import org.apache.mina.core.future.IoFutureListener;
+import org.apache.mina.core.future.WriteFuture;
+import org.apache.mina.core.session.IoSession;
 
 import com.taobao.tair.etc.TairClientException;
 import com.taobao.tair.packet.BasePacket;
@@ -74,7 +74,7 @@ public class TairClient {
 		byte[] data = new byte[bb.remaining()];
 		bb.get(data);		
 		WriteFuture writeFuture = session.write(data);
-		writeFuture.addListener(new IoFutureListener() {
+		writeFuture.addListener(new IoFutureListener<IoFuture>() {
 
 			public void operationComplete(IoFuture future) {
 				WriteFuture wfuture = (WriteFuture) future;
@@ -150,7 +150,7 @@ public class TairClient {
 		byte[] data = new byte[bb.remaining()];
 		bb.get(data);
 		WriteFuture writeFuture=session.write(data);
-		writeFuture.addListener(new IoFutureListener(){
+		writeFuture.addListener(new IoFutureListener<IoFuture>(){
 
 			public void operationComplete(IoFuture future) {
 				WriteFuture wfuture=(WriteFuture)future;
