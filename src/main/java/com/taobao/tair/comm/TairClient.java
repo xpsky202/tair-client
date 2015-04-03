@@ -18,10 +18,11 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.mina.common.IoFuture;
-import org.apache.mina.common.IoFutureListener;
-import org.apache.mina.common.IoSession;
-import org.apache.mina.common.WriteFuture;
+import org.apache.mina.core.future.IoFuture;
+import org.apache.mina.core.future.IoFutureListener;
+import org.apache.mina.core.future.WriteFuture;
+import org.apache.mina.core.service.IoConnector;
+import org.apache.mina.core.session.IoSession;
 
 import com.taobao.tair.etc.TairClientException;
 import com.taobao.tair.packet.BasePacket;
@@ -43,6 +44,7 @@ public class TairClient {
 										new ConcurrentHashMap<Integer, ArrayBlockingQueue<Object>>();
 	
 	private final IoSession session;
+	private final IoConnector connector;
 	
 	private String key;
 	
@@ -55,8 +57,9 @@ public class TairClient {
 	}
 	
 
-	protected TairClient(TairClientFactory factory, IoSession session,String key) {
+	protected TairClient(TairClientFactory factory, IoConnector connector, IoSession session,String key) {
 		this.session = session;
+		this.connector = connector;
 		this.key=key;
 		this.clientFactory = factory;
 	}
@@ -74,7 +77,7 @@ public class TairClient {
 		byte[] data = new byte[bb.remaining()];
 		bb.get(data);		
 		WriteFuture writeFuture = session.write(data);
-		writeFuture.addListener(new IoFutureListener() {
+		writeFuture.addListener(new IoFutureListener<IoFuture>() {
 
 			public void operationComplete(IoFuture future) {
 				WriteFuture wfuture = (WriteFuture) future;
@@ -150,7 +153,7 @@ public class TairClient {
 		byte[] data = new byte[bb.remaining()];
 		bb.get(data);
 		WriteFuture writeFuture=session.write(data);
-		writeFuture.addListener(new IoFutureListener(){
+		writeFuture.addListener(new IoFutureListener<IoFuture>(){
 
 			public void operationComplete(IoFuture future) {
 				WriteFuture wfuture=(WriteFuture)future;
@@ -257,7 +260,10 @@ public class TairClient {
 	
 	public void close() {
 		if (session != null) {
-			session.close();
+			session.close(false);
+		}
+		if(connector !=null){
+			connector.dispose();
 		}
 		if (responses != null) {
 			responses.clear();

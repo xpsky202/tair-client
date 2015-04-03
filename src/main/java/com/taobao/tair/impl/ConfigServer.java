@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.mina.common.IoSession;
+import org.apache.mina.core.session.IoSession;
 
 import com.taobao.tair.comm.ResponseListener;
 import com.taobao.tair.comm.TairClient;

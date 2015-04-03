@@ -8,7 +8,7 @@
  */
 package com.taobao.tair.comm;
 
-import org.apache.mina.common.IoSession;
+import org.apache.mina.core.session.IoSession;
 
 import com.taobao.tair.etc.TairClientException;
 
