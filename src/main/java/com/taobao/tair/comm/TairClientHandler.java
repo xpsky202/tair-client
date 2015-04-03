@@ -73,7 +73,7 @@ public class TairClientHandler extends IoHandlerAdapter{
 		if (LOGGER.isWarnEnabled())
 			LOGGER.warn("connection exception occured", cause);
 		
-		//ÍøÂçĞ´³¬Ê±³¬¹ı3´Î£¬Ö÷¶¯¹Ø±Õµ±Ç°Á¬½Ó
+		//ç½‘ç»œå†™è¶…æ—¶è¶…è¿‡3æ¬¡ï¼Œä¸»åŠ¨å…³é—­å½“å‰è¿æ¥
 		if(cause instanceof WriteTimeoutException){
 			LOGGER.error("write timeout");
 			if(writeTimeoutCount.incrementAndGet()==3){

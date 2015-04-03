@@ -45,8 +45,6 @@ public class TairClientFactory {
 
 	private static final int MIN_CONN_TIMEOUT = 1000;
 
-	private SocketConnector ioConnector;
-
 	private final ConcurrentHashMap<String, FutureTask<TairClient>> clients = new ConcurrentHashMap<String, FutureTask<TairClient>>();
 
 	public TairClientFactory() {
@@ -115,7 +113,7 @@ public class TairClientFactory {
 
 	private synchronized TairClient createClient(String targetUrl, int connectionTimeout, PacketStreamer pstreamer) throws Exception {
 
-		ioConnector = new NioSocketConnector();
+		SocketConnector ioConnector = new NioSocketConnector();
 		
 		SocketSessionConfig cfg = ioConnector.getSessionConfig();
 		if (connectionTimeout < MIN_CONN_TIMEOUT)
@@ -150,7 +148,7 @@ public class TairClientFactory {
 		if (LOGGER.isTraceEnabled()) {
 			LOGGER.trace("create tair connection success,targetaddress is " + targetUrl);
 		}
-		TairClient client = new TairClient(this, ioSession, targetUrl);
+		TairClient client = new TairClient(this, ioConnector, ioSession, targetUrl);
 		processor.setClient(client);
 		processor.setFactory(this, targetUrl);
 		return client;
